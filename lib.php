@@ -1,3 +1,81 @@
+function __toString($data)
+{
+  // Returns a string representation of the data
+  //
+  // $data as mixed is the data to be converted into a string
+  //
+  // no globals
+  //
+  // Returns a string
+  //
+  // Version 1 * Char-Lez Braden * 2008-07-26
+  // Version 2 * Char-Lez Braden * 2008-10-25
+  //  * Do not print key/value headers on arrays with zero entries
+  //
+  //
+  switch(gettype($data))
+  {
+    case "array":
+      $result="<table border=1 cellspacing=0 cellpadding=1><tr><td align=left valign=top>ARRAY</td><td align=left valign=left>COUNT=".count($data)."</td></tr>\n";
+      if (count($data)>0)
+      {
+        $result.="<tr><td align=center valign=center>Key</td><td align=center valign=top>Value</td></tr>\n";
+      }
+      foreach($data as $k=>$v)
+      {
+        $result.="<tr><td align=center valign=top>$k</td><td align=left valign=top>".__toString($v)."</td></tr>\n";
+      } // foreach($data as $k=>$v)
+      $result.="</table>";
+    break;
+    //
+    case "boolean":
+      if ($data===true)
+      {
+        $result="Boolean: TRUE";
+      }
+      else
+      {
+        $result="Boolean: FALSE";
+      } // if ($data===true)
+    break;
+    //
+    case "double":
+      $result="Double: ".strval($data);
+    break;
+    //
+    case "integer":
+      $result="Integer: ".strval($data);
+    break;
+    //
+    case "NULL":
+      $result="NULL";
+    break;
+    //
+    case "object":
+      $result=__toString($data);
+    break;
+    //
+    case "resource":
+      $result="Resource [".serialize($data)."]";
+    break;
+    //
+    case "string":
+      $result="String: Length=".strlen($data)." [$data]";
+    break;
+    //
+    case "unknown type":
+      $result="Unknown type [".serialize($data)."]";
+    break;
+    //
+    default:
+      $result="Error [".serialize($data)."]";
+    break;
+  } // switch(gettype($data))
+  //
+  return $result;
+} // function __toString($data)
+
+
 function is_date($test)
 {
   // Returns true if test is a date YYYY-MM-DD format, false otherwise
@@ -56,8 +134,6 @@ function is_date_time($test)
   //
   return is_date($parts[0]) && is_time($parts[1]);
 } // function is_date_time($test)
-
-
 
 
 function is_digit($test)
@@ -165,7 +241,6 @@ function is_time($test)
   //
   return true;
 } // function is_time($test)
-
 
 
 function is_all_digits($test)
